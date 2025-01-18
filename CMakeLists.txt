@@ -7,6 +7,7 @@ add_library(SDPTest
     structures/Optional/Optional.hpp
     structures/Array/ArrayStatic.hpp
     structures/Pair/Pair.hpp
+    structures/List/LinkedList.hpp
 )
 
 include(CTest)
@@ -32,6 +33,7 @@ add_executable(unit_tests
     tests/Optional/OptionalTest.cpp 
     tests/Array/ArrayTest.cpp
     tests/Pair/Pair.cpp
+    tests/List/ListTest.cpp
 )
 
 target_link_libraries(unit_tests

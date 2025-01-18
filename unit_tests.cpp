@@ -1,6 +1,7 @@
 #include <string>
 
 #include <gtest/gtest.h>
+#include "structures/List/LinkedList.hpp"
 // Main function for Google Test
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
