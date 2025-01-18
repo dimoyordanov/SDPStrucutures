@@ -35,3 +35,11 @@ TEST(ArrayTest, TestSetAndGetIsOkWhenNotExistent) {
     EXPECT_FALSE(inter->get(3).check());
     delete inter;
 }
+
+TEST(ArrayTest, TestCopyContructor) {
+    ArrayStatic<int>* inter = new ArrayStatic<int>(20);
+    EXPECT_TRUE(inter->set(0, 2));
+    ArrayStatic<int>* inter2 = new ArrayStatic<int>(*inter);
+    EXPECT_EQ(*(inter2->get(0)), 2);
+    delete inter;
+}

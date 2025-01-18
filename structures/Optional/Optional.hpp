@@ -22,6 +22,7 @@ public:
     Optional& operator=(const Optional& val){
         this->data = val.data;
         this->hasValue = val.hasValue;
+        return *this;
     }
 
     void set(T data) {this->data = data; this->hasValue = true;}

@@ -11,6 +11,25 @@ class ArrayStatic {
             value = new Optional<T>[s];
             capacity = s;
         }
+
+        ArrayStatic(ArrayStatic&& array){
+            this->value = array.value;
+            this->capacity = array.capacity;
+
+            array.value = nullptr;
+            array.capacity = 0;
+        }
+
+        ArrayStatic(const ArrayStatic& array){
+            value = new Optional<T>[array.capacity];
+            capacity = array.capacity;
+            for(int i = 0; i < capacity; i++){
+                if(array.value[i].check()){
+                    this->value[i] = array.value[i];
+                }
+            }
+        }
+
         Optional<T> get(size_t index) const{
             if (index < 0 || index >= capacity) {
                 return Optional<T>();
