@@ -13,3 +13,13 @@ TEST(OptionalTest, OptionalTestUnset) {
 
   EXPECT_TRUE(Optional<int>(4).check());
 }
+
+TEST(OptionalTest, OptionalGetValue) {
+
+  EXPECT_TRUE(Optional<int>(4).get() == 4);
+}
+
+TEST(OptionalTest, OptionalGetPointer) {
+
+  EXPECT_TRUE(*Optional<int>(4) == 4);
+}

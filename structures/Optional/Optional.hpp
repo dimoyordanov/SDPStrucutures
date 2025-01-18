@@ -27,8 +27,8 @@ public:
     bool check() { return this->set; }
     operator bool() { return check(); }
 
-    T* get() { return this->data; }
-    T* operator*() { return get(); }
+    T get() { return this->data; }
+    T operator*() { return get(); }
 };
 
 
