@@ -6,6 +6,7 @@ add_library(SDPTest
     main.cpp
     structures/Optional/Optional.hpp
     structures/Array/ArrayStatic.hpp
+    structures/Pair/Pair.hpp
 )
 
 include(CTest)
@@ -29,7 +30,9 @@ enable_testing()
 add_executable(unit_tests 
     unit_tests.cpp 
     tests/Optional/OptionalTest.cpp 
-    tests/Array/ArrayTest.cpp)
+    tests/Array/ArrayTest.cpp
+    tests/Pair/Pair.cpp
+)
 
 target_link_libraries(unit_tests
     SDPTest
