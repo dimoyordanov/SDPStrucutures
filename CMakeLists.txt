@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.30.5)
 project(SDPStructures VERSION 0.1.0 LANGUAGES C CXX)
 
 # Add an library for the example classes
