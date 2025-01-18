@@ -8,23 +8,27 @@ class Optional
 {
 private:
     T data;
-    bool set;
+    bool hasValue;
 
 public:
-    Optional(T data) : data(data), set(true) {};
-    Optional() : set(false) {};
+    Optional(T data) : data(data), hasValue(true) {};
+    Optional() : hasValue(false) {};
 
     Optional(const Optional& val) {
         this->data = val.data;
-        this->set = val.set;
+        this->hasValue = val.hasValue;
     }
 
     Optional& operator=(const Optional& val){
         this->data = val.data;
-        this->set = val.set;
+        this->hasValue = val.hasValue;
     }
 
-    bool check() { return this->set; }
+    void set(T data) {this->data = data; this->hasValue = true;}
+
+    void unset() {this->hasValue = false;}
+
+    bool check() { return this->hasValue; }
     operator bool() { return check(); }
 
     T get() { return this->data; }

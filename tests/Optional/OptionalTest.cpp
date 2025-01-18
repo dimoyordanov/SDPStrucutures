@@ -23,3 +23,21 @@ TEST(OptionalTest, OptionalGetPointer) {
 
   EXPECT_TRUE(*Optional<int>(4) == 4);
 }
+
+TEST(OptionalTest, OptionalSetValue) {
+
+  Optional<int> val;
+  val.set(3);
+
+  EXPECT_TRUE(*val == 3);
+
+  EXPECT_TRUE(val.check());
+}
+
+TEST(OptionalTest, OptionalUnsetValue) {
+
+  Optional<int> val;
+  val.set(3);
+  val.unset();
+  EXPECT_FALSE(val.check());
+}
