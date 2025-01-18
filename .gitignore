@@ -1,3 +1,5 @@
 main*
 out/**
 .vscode/**
+Testing/**
+build/**
