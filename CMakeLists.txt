@@ -5,7 +5,6 @@ project(SDPStructures VERSION 0.1.0 LANGUAGES C CXX)
 add_library(SDPTest 
     main.cpp
     structures/Optional/Optional.hpp
-    structures/Array/ArrayInterface.hpp
     structures/Array/ArrayStatic.hpp
 )
 
