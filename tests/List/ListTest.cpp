@@ -82,3 +82,34 @@ TEST(LinkedListTests, LinkListCopy) {
         EXPECT_EQ(i, b++);
     }
 }
+TEST(LinkedListTests, LinkListMap) {
+    LinkedList<int> list;
+    
+     for(int i = 20; i >= 0; i--){
+        list.pushFront(i);
+    }
+
+    LinkedList<int> list2 = LinkedList<int>::map(list, [](int i){return i*i;});
+
+    int b = 0;
+    for(auto i: list2){
+        EXPECT_EQ(i, b*b);
+        b+=1;
+    }
+}
+
+TEST(LinkedListTests, LinkedListFilter) {
+    LinkedList<int> list;
+    
+     for(int i = 20; i >= 0; i--){
+        list.pushFront(i);
+    }
+
+    LinkedList<int> list2 = LinkedList<int>::filter(list, [](int i)->bool{return i%2;});
+
+    int b = 1;
+    for(auto i: list2){
+        EXPECT_EQ(i, b);
+        b+=2;
+    }
+}

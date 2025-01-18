@@ -74,7 +74,7 @@ class LinkedList {
             return this->head==nullptr || this->endNode == nullptr;
         }
 
-        bool pushFront(T value) {
+        bool pushFront(const T& value) {
             this->head = new Node<T>(value, this->head);
 
             if (isEmpty()) {
@@ -82,7 +82,24 @@ class LinkedList {
             }
             return true;
         }
-        bool pushBack(T value) {
+        bool pushBack(const T& value) {
+            if (isEmpty()) {
+              pushFront(value);
+            } else {
+                this->endNode = (this->endNode->next = new Node<T>(value));
+            }
+            return true;
+        }
+
+        bool pushFront(T&& value) {
+            this->head = new Node<T>(value, this->head);
+
+            if (isEmpty()) {
+                this->endNode = this->head;
+            }
+            return true;
+        }
+        bool pushBack(T&& value) {
             if (isEmpty()) {
               pushFront(value);
             } else {
@@ -121,6 +138,24 @@ class LinkedList {
                 this->popFront();
             }
         }
+
+        static LinkedList<T> map(const LinkedList<T>& move, T (*f)(T)){
+            LinkedList<T> list;
+            for (auto i : move){
+                list.pushBack(f(i));
+            }
+            return list;
+        } 
+        static LinkedList<T> filter(const LinkedList<T>& move, bool (*f)(T)){
+            LinkedList<T> list;
+            for (auto i : move){
+                if (f(i)){
+                    list.pushBack(i);
+                }
+            }
+            return list;
+        } 
+
 
         ~LinkedList(){
             erase();
