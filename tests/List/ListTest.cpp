@@ -40,3 +40,45 @@ TEST(LinkedListTests, LinkListedPushFront) {
         EXPECT_EQ(*(list.popFront()), i);
     }
 }
+
+TEST(LinkedListTests, LinkListIterator) {
+    LinkedList<int> list;
+    
+     for(int i = 20; i >= 0; i--){
+        list.pushFront(i);
+    }
+    int b = 0;
+    for(auto i: list){
+        EXPECT_EQ(i, b++);
+    }
+}
+
+TEST(LinkedListTests, LinkListEqual) {
+    LinkedList<int> list;
+    
+     for(int i = 20; i >= 0; i--){
+        list.pushFront(i);
+    }
+
+    LinkedList<int> list2 = list;
+
+    int b = 0;
+    for(auto i: list2){
+        EXPECT_EQ(i, b++);
+    }
+}
+
+TEST(LinkedListTests, LinkListCopy) {
+    LinkedList<int> list;
+    
+     for(int i = 20; i >= 0; i--){
+        list.pushFront(i);
+    }
+
+    LinkedList<int> list2(list);
+
+    int b = 0;
+    for(auto i: list2){
+        EXPECT_EQ(i, b++);
+    }
+}
