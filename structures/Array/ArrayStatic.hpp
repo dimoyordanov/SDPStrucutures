@@ -7,10 +7,50 @@ class ArrayStatic {
         Optional<T>* value;
         size_t capacity;
     public:
+
+        template <typename L>
+        class IteratorArrayStatic{
+            size_t capacity;
+            Optional<L>* list;
+            size_t location;
+            Optional<L> empty;
+            public:
+            IteratorArrayStatic(Optional<L>* list, size_t capacity, size_t location){
+                this->capacity = capacity;
+                this->list = list;
+                this->location = location;
+            }
+            IteratorArrayStatic(const IteratorArrayStatic& iterator){
+                this->capacity = iterator.capacity;
+                this->list = iterator.list;
+                this->location = iterator.location;
+            }
+
+            bool valid() const { return this->capacity > this->location; }
+            operator bool() const { return valid(); }
+            Optional<L>& get () {if (!valid()) {return empty;} else {return this->list[location];}}
+            Optional<L>& operator*() {return get();}
+            IteratorArrayStatic<L>& next(){this->location++; return *this;}
+            IteratorArrayStatic<L>& prev(){this->location--; return *this;}
+            IteratorArrayStatic<L>& operator++() { return next();}
+            IteratorArrayStatic<L> operator++(int a) {IteratorArrayStatic<L> iterator2(*this);next();return iterator2;}
+            bool operator==(const IteratorArrayStatic& iterator) {return this->location == iterator.location;}
+        };
+
+        IteratorArrayStatic<T> begin(){
+            return IteratorArrayStatic<T>(this->value, this->capacity, 0);
+        }
+
+        IteratorArrayStatic<T> end(){
+            return IteratorArrayStatic<T>(this->value, this->capacity, this->capacity);
+        }
+
         ArrayStatic(size_t s = 20){
             value = new Optional<T>[s];
             capacity = s;
         }
+
+
 
         ArrayStatic(ArrayStatic&& array){
             this->value = array.value;

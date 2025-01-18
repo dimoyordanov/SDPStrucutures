@@ -25,6 +25,11 @@ public:
         return *this;
     }
 
+     Optional(Optional&& val){
+        this->data = val.data;
+        this->hasValue = val.hasValue;
+    }
+
     void set(T data) {this->data = data; this->hasValue = true;}
 
     void unset() {this->hasValue = false;}

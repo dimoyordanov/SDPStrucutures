@@ -43,3 +43,17 @@ TEST(ArrayTest, TestCopyContructor) {
     EXPECT_EQ(*(inter2->get(0)), 2);
     delete inter;
 }
+
+TEST(ArrayTest, testIterator) {
+    ArrayStatic<int>* inter = new ArrayStatic<int>(20);
+    for(int i = 0;i<20;i++){
+        EXPECT_TRUE(inter->set(i, i+1));
+    }
+    auto a = inter->begin();
+    for(int i = 0; i<20; i++){
+        EXPECT_EQ(**a,i+1);
+        a++;
+    }
+    EXPECT_FALSE(a.valid());
+    delete inter;
+}
