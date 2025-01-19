@@ -8,6 +8,8 @@ add_library(SDPTest
     structures/Array/ArrayStatic.hpp
     structures/Pair/Pair.hpp
     structures/List/LinkedList.hpp
+    structures/List/DoublyLinkedList.hpp
+    structures/Trees/Trees.hpp
 )
 
 include(CTest)
@@ -34,6 +36,8 @@ add_executable(unit_tests
     tests/Array/ArrayTest.cpp
     tests/Pair/Pair.cpp
     tests/List/ListTest.cpp
+    tests/List/DoublyLinkedList.cpp
+    tests/Tree/Tree.cpp
 )
 
 target_link_libraries(unit_tests

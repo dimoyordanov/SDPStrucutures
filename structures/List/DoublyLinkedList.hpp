@@ -3,15 +3,23 @@
 #include "../../structures/Optional/Optional.hpp"
 
 template <typename T>
-class LinkedList {
+class DoublyLinkedList {
     private:
         template <typename L>
         struct Node{
             L value;
             Node<L>* next;
-            Node(L value): value(value), next(nullptr) {}
-            Node(L value, Node<L>* next): value(value), next(next) {}
-            Node(Node&& node) {this->value = node.value; this->next = node.next; node.next=nullptr;}
+            Node<L>* prev;
+            Node(L value): value(value), next(nullptr), prev(nullptr) {}
+            Node(L value, Node<L>* next): value(value), next(next), prev(nullptr) {}
+            Node(L value, Node<L>* next, Node<L>* prev): value(value), next(next), prev(prev) {}
+            Node(Node&& node) {
+                this->value = node.value;
+                this->next = node.next;
+                this->prev = node.prev;
+                node.prev = nullptr;
+                node.next=nullptr;
+            }
         };
         using N = Node<T>;
         N *head;
@@ -22,7 +30,7 @@ class LinkedList {
         template <typename B>
         class IteratorLinkedList {
             Node<B>* elem;
-            friend LinkedList<B>;
+            friend DoublyLinkedList<B>;
             public:
                 IteratorLinkedList(): elem(nullptr){}
                 IteratorLinkedList(Node<B>* node): elem(node){}
@@ -30,9 +38,12 @@ class LinkedList {
                 bool valid() {return elem != nullptr;}
                 Optional<B> get() {return (!valid())?Optional<B>():Optional<B>(elem->value);}
                 IteratorLinkedList<B> next() {return (!valid())?IteratorLinkedList():IteratorLinkedList(this->elem->next);}
+                IteratorLinkedList<B> prev() {return (!valid())?IteratorLinkedList():IteratorLinkedList(this->elem->prev);}
                 bool equal(IteratorLinkedList<B>& val) {return this->elem == val.elem;}
                 IteratorLinkedList<B>& operator++() {return *this = this->next();}
+                IteratorLinkedList<B>& operator--() {return *this = this->prev();}
                 IteratorLinkedList<B> operator++(int a) {IteratorLinkedList<B> v = *this; *this = this->next(); return v;}
+                IteratorLinkedList<B> operator--(int a) {IteratorLinkedList<B> v = *this; *this = this->prev(); return v;}
                 B operator*() {return elem->value;}
                 bool operator==(IteratorLinkedList<B> elem) {return this->equal(elem);}
                 bool operator!=(IteratorLinkedList<B> elem) {return !this->equal(elem);}
@@ -53,60 +64,20 @@ class LinkedList {
             return I();
         }
 
-        Optional<T> removeAfter(I position) {
-            if(!position.valid()) {
-                return Optional<T>();
-            }
-            Node<T>* value = position.elem->next;
-            if(value == nullptr) {
-                return Optional<T>();
-            }
-            position.elem->next = nullptr;
-            T retValue = value->value;
-            delete value;
-            return retValue;
-        }
-
-        Optional<T> removeAt(I position) {
-            if(!position.valid()) {
-                return Optional<T>();
-            }
-            Node<T>* value = position.elem;
-            T retValue = value->value;
-            if(position.elem == head) {
-                head = position.elem->next;
-                position.elem->next = nullptr;
-            } else {
-                bool found = false;
-                I iterator;
-                for (iterator = this->begin(); iterator != end(); ++iterator){
-                    if(position.elem == iterator.elem->next){
-                        found = true;
-                        break;
-                    }
-                }
-                if (found == true) {
-                    removeAfter(iterator);
-                } else {
-                    return Optional<T>();
-                }
-            }
-            delete value;
-            return retValue;
-        }
-
         bool insertAfter(I position, const T& nodeValue) {
             if(!position.valid()) {
                 if(isEmpty()){
-                    this->endNode = this->head = new N(nodeValue, this->head);
+                    this->endNode = this->head = new N(nodeValue);
                     return true;
                 } 
                 return false;
             }
-            N* value = new N(nodeValue, position.elem->next);
+            N* value = new N(nodeValue, position.elem->next, position.elem);
             position.elem->next = value;
-            if(endNode == position.elem) {
+            if (endNode == position.elem) {
                 endNode = value;
+            } else {
+                value->next->prev = value;
             }
             return true;
         }
@@ -114,45 +85,36 @@ class LinkedList {
         bool insertBefore(I position, const T& nodeValue) {
             if(!position.valid()) {
                 if(isEmpty()){
-                    this->endNode = this->head = new N(nodeValue, this->head);
+                    this->endNode = this->head = new N(nodeValue);
                     return true;
                 } 
                 return false;
             }
-            if (position.elem == head) {
-                N* value = new N(nodeValue, position.elem);
-                this->head = value;
-                return true;
+            N* value = new N(nodeValue, position.elem, position.elem->prev);
+            position.elem->prev = value;
+            if (head == position.elem) {
+                head = value;
+            } else {
+                value->prev->next = value;
             }
-            bool found = false;
-            I iterator;
-            for (iterator = this->begin(); iterator != end(); ++iterator){
-                if(position.elem == iterator.elem->next){
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
-                insertAfter(iterator, nodeValue);
-            }
-            return found;
+            return true;
         }
 
-        LinkedList() : head(nullptr), endNode(nullptr) {}
+        DoublyLinkedList() : head(nullptr), endNode(nullptr) {}
 
-        LinkedList(LinkedList&& move) {
+        DoublyLinkedList(DoublyLinkedList&& move) {
             this->head = move.head;
             this->endNode = move.endNode;
             move.head=move.endNode=nullptr;
         }
 
-        LinkedList(const LinkedList& move) : head(nullptr), endNode(nullptr) {
+        DoublyLinkedList(const DoublyLinkedList& move) : head(nullptr), endNode(nullptr) {
             for (auto i : move){
                 this->pushBack(i);
             }
         }
 
-        LinkedList& operator=(const LinkedList& move) {
+        DoublyLinkedList& operator=(const DoublyLinkedList& move) {
             for (auto i : move){
                 this->pushBack(i);
             }
@@ -188,6 +150,9 @@ class LinkedList {
             } 
             N* temp = this->head;
             this->head = temp->next;
+            if (temp->next != nullptr) {
+                temp->next->prev = nullptr;
+            }
             T value = temp->value;
             delete temp;
             return Optional<T>(value);
@@ -213,15 +178,15 @@ class LinkedList {
             }
         }
 
-        static LinkedList<T> map(const LinkedList<T>& move, T (*f)(T)){
-            LinkedList<T> list;
+        static DoublyLinkedList<T> map(const DoublyLinkedList<T>& move, T (*f)(T)){
+            DoublyLinkedList<T> list;
             for (auto i : move){
                 list.pushBack(f(i));
             }
             return list;
         } 
-        static LinkedList<T> filter(const LinkedList<T>& move, bool (*f)(T)){
-            LinkedList<T> list;
+        static DoublyLinkedList<T> filter(const DoublyLinkedList<T>& move, bool (*f)(T)){
+            DoublyLinkedList<T> list;
             for (auto i : move){
                 if (f(i)){
                     list.pushBack(i);
@@ -231,7 +196,7 @@ class LinkedList {
         } 
 
 
-        ~LinkedList(){
+        ~DoublyLinkedList(){
             erase();
         }
 
