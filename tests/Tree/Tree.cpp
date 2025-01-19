@@ -20,3 +20,26 @@ TEST(BinarySearchTree, BinarySerchTreeCreate) {
     
     EXPECT_FALSE(p.contains(6));
 }
+
+
+TEST(BinarySearchTree, BinarySerchTreeDeleteNode) {
+    BinarySearchTree<int> p;
+    for(int i: {5,3,8,4,2,1,7,9,6,0}){
+        p.add(i);
+    }
+
+    for (size_t i = 0; i < 10; i++)
+    {
+        EXPECT_TRUE(p.contains(i));
+    }
+    for (size_t i = 0; i < 10; i++)
+    {
+
+        EXPECT_TRUE(p.contains(i));
+        EXPECT_TRUE(p.deleteElem(i));
+        EXPECT_FALSE(p.contains(i));
+        EXPECT_FALSE(p.deleteElem(i));
+    }
+
+    EXPECT_FALSE(p.deleteElem(20));
+}

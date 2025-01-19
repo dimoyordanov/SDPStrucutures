@@ -23,7 +23,15 @@ protected:
         No** elem;
         for(elem = &(this->root);
             (*elem) != nullptr && (*elem)->data != value;
-            elem = ((*elem)->data > value)?&((*elem)->right):&((*elem)->left)){}
+            elem = ((*elem)->data < value)?&((*elem)->right):&((*elem)->left)){}
+        
+        return *elem;
+    }
+    Node<T>*& findMinBox(No* start) {
+        No** elem;
+        for(elem = &(start);
+            (*elem) != nullptr;
+            elem = &((*elem)->left)){}
         
         return *elem;
     }
@@ -32,12 +40,28 @@ public:
     BinarySearchTree() : root(nullptr) {};
     
     bool add(T value) {
-        No* elem = new No(value);
-        gotoElement(value) = elem;
+        No*& val = gotoElement(value);
+        if (val != nullptr) {
+            return false;
+        }
+        val = new No(value);
         return true;
     }
     
     bool contains(T value) {
         return gotoElement(value)!=nullptr;
+    }
+
+    bool deleteElem(T value) {
+        No*& val = gotoElement(value);
+        No* orig = val;
+        if (val == nullptr) {
+            return false;
+        }
+        No*& elem = findMinBox(val->right);
+        elem = val->left;
+        val = val->right;
+        delete orig;
+        return true;
     }
 };
