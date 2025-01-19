@@ -10,6 +10,8 @@ add_library(SDPTest
     structures/List/LinkedList.hpp
     structures/List/DoublyLinkedList.hpp
     structures/Trees/Trees.hpp
+    structures/Stack/LinkedStack.hpp
+    structures/Queue/LinkedQueue.hpp
 )
 
 include(CTest)

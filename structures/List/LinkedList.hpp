@@ -62,6 +62,9 @@ class LinkedList {
                 return Optional<T>();
             }
             position.elem->next = value->next;
+            if (value->next == nullptr) {
+                this->endNode = position.elem;
+            }
             T retValue = value->value;
             delete value;
             return retValue;
@@ -76,6 +79,8 @@ class LinkedList {
             if(position.elem == head) {
                 head = position.elem->next;
                 position.elem->next = nullptr;
+                delete value;
+                return retValue;
             } else {
                 bool found = false;
                 I iterator;
@@ -86,13 +91,11 @@ class LinkedList {
                     }
                 }
                 if (found == true) {
-                    removeAfter(iterator);
+                    return removeAfter(iterator);
                 } else {
                     return Optional<T>();
                 }
             }
-            delete value;
-            return retValue;
         }
 
         bool insertAfter(I position, const T& nodeValue) {
@@ -183,14 +186,11 @@ class LinkedList {
         }
 
         Optional<T> popFront() {
-            if (isEmpty()) {
-              return Optional<T>();
-            } 
-            N* temp = this->head;
-            this->head = temp->next;
-            T value = temp->value;
-            delete temp;
-            return Optional<T>(value);
+            return removeAt(this->begin());
+        }
+
+        Optional<T> popBack() {
+            return removeAt(this->last());
         }
 
         Optional<T> front() {

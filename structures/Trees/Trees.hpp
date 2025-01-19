@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../../structures/Stack/LinkedStack.hpp"
+#include "../../structures/Queue/LinkedQueue.hpp"
+
 template <typename T>
 class BinarySearchTree
 {
@@ -38,7 +41,7 @@ protected:
 
 public:
     BinarySearchTree() : root(nullptr) {};
-    
+
     bool add(T value) {
         No*& val = gotoElement(value);
         if (val != nullptr) {
