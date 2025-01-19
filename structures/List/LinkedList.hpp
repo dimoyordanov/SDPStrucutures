@@ -61,7 +61,7 @@ class LinkedList {
             if(value == nullptr) {
                 return Optional<T>();
             }
-            position.elem->next = nullptr;
+            position.elem->next = value->next;
             T retValue = value->value;
             delete value;
             return retValue;

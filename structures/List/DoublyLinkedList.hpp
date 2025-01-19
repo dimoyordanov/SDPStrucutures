@@ -121,6 +121,42 @@ class DoublyLinkedList {
             return *this;
         }
 
+        Optional<T> removeAfter(I position) {
+            if(!position.valid()) {
+                return Optional<T>();
+            }
+            Node<T>* value = position.elem->next;
+            if(value == nullptr) {
+                return Optional<T>();
+            }
+            position.elem->next = nullptr;
+            T retValue = value->value;
+            delete value;
+            return retValue;
+        }
+
+        Optional<T> removeAt(I position) {
+            if(!position.valid()) {
+                return Optional<T>();
+            }
+            Node<T>* value = position.elem;
+
+            if(value->prev == nullptr && value->next == nullptr) {
+                this->head = this->endNode = nullptr;
+            } else if(value->prev == nullptr) {
+                this->head = value->next;
+                this->head->prev = nullptr;
+            } else if(value->next == nullptr) {
+                this->endNode = value->prev;
+                this->endNode->next = nullptr;
+            } else {
+                value->prev->next = value->next;
+                value->next->prev = value->prev;
+            }
+            T retValue = value->value;
+            delete value;
+            return retValue;
+        }
 
         bool isEmpty() const{
             return this->head==nullptr || this->endNode == nullptr;
@@ -145,17 +181,10 @@ class DoublyLinkedList {
         }
 
         Optional<T> popFront() {
-            if (isEmpty()) {
-              return Optional<T>();
-            } 
-            N* temp = this->head;
-            this->head = temp->next;
-            if (temp->next != nullptr) {
-                temp->next->prev = nullptr;
-            }
-            T value = temp->value;
-            delete temp;
-            return Optional<T>(value);
+            return this->removeAt(begin());
+        }
+        Optional<T> popBack() {
+            return this->removeAt(last());
         }
 
         Optional<T> front() {
