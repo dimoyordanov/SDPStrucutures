@@ -37,12 +37,14 @@ class ArrayStatic {
             bool operator==(const IteratorArrayStatic& iterator) {return this->location == iterator.location;}
         };
 
-        IteratorArrayStatic<T> begin(){
-            return IteratorArrayStatic<T>(this->value, this->capacity, 0);
+        using I = IteratorArrayStatic<T>;
+
+        I begin(){
+            return I(this->value, this->capacity, 0);
         }
 
-        IteratorArrayStatic<T> end(){
-            return IteratorArrayStatic<T>(this->value, this->capacity, this->capacity);
+        I end(){
+            return I(this->value, this->capacity, this->capacity);
         }
 
         ArrayStatic(size_t s = 20){

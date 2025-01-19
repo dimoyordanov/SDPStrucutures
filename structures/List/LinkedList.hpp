@@ -13,14 +13,16 @@ class LinkedList {
             Node(L value, Node<L>* next): value(value), next(next) {}
             Node(Node&& node) {this->value = node.value; this->next = node.next; node.next=nullptr;}
         };
-        Node<T> *head;
-        Node<T> *endNode;
+        using N = Node<T>;
+        N *head;
+        N *endNode;
 
     public:
 
         template <typename B>
         class IteratorLinkedList {
             Node<B>* elem;
+            friend LinkedList<B>;
             public:
                 IteratorLinkedList(): elem(nullptr){}
                 IteratorLinkedList(Node<B>* node): elem(node){}
@@ -30,22 +32,67 @@ class LinkedList {
                 IteratorLinkedList<B> next() {return (!valid())?IteratorLinkedList():IteratorLinkedList(this->elem->next);}
                 bool equal(IteratorLinkedList<B>& val) {return this->elem == val.elem;}
                 IteratorLinkedList<B>& operator++() {return *this = this->next();}
-                IteratorLinkedList<B> operator++(int a) {IteratorLinkedList<B> v = this; *this = this->next(); return v;}
+                IteratorLinkedList<B> operator++(int a) {IteratorLinkedList<B> v = *this; *this = this->next(); return v;}
                 B operator*() {return elem->value;}
                 bool operator==(IteratorLinkedList<B> elem) {return this->equal(elem);}
                 bool operator!=(IteratorLinkedList<B> elem) {return !this->equal(elem);}
         };
 
-        IteratorLinkedList<T> begin() const{
-            return IteratorLinkedList<T>(this->head);
+
+        using I = IteratorLinkedList<T>;
+
+        I begin() const{
+            return I(this->head);
         }
 
-        IteratorLinkedList<T> last() const{
-            return IteratorLinkedList<T>(this->endNode);
+        I last() const{
+            return I(this->endNode);
         }
 
-        IteratorLinkedList<T> end() const{
-            return IteratorLinkedList<T>();
+        I end() const{
+            return I();
+        }
+
+        bool insertAfter(I position, const T& nodeValue) {
+            if(!position.valid()) {
+                if(isEmpty()){
+                    this->endNode = this->head = new N(nodeValue, this->head);
+                    return true;
+                } 
+                return false;
+            }
+            N* value = new N(nodeValue, position.elem->next);
+            position.elem->next = value;
+            if(endNode == position.elem) {
+                endNode = value;
+            }
+            return true;
+        }
+
+        bool insertBefore(I position, const T& nodeValue) {
+            if(!position.valid()) {
+                if(isEmpty()){
+                    this->endNode = this->head = new N(nodeValue, this->head);
+                } 
+                return false;
+            }
+            if (position.elem == head) {
+                N* value = new N(nodeValue, position.elem);
+                this->head = value;
+                return true;
+            }
+            bool found = false;
+            I iterator;
+            for (iterator = this->begin(); iterator != end(); ++iterator){
+                if(position.elem == iterator.elem->next){
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                insertAfter(iterator, nodeValue);
+            }
+            return found;
         }
 
         LinkedList() : head(nullptr), endNode(nullptr) {}
@@ -75,24 +122,16 @@ class LinkedList {
         }
 
         bool pushFront(const T& value) {
-            this->head = new Node<T>(value, this->head);
-
-            if (isEmpty()) {
-                this->endNode = this->head;
-            }
+            insertBefore(begin(), value);
             return true;
         }
         bool pushBack(const T& value) {
-            if (isEmpty()) {
-              pushFront(value);
-            } else {
-                this->endNode = (this->endNode->next = new Node<T>(value));
-            }
+            insertAfter(last(), value);
             return true;
         }
 
         bool pushFront(T&& value) {
-            this->head = new Node<T>(value, this->head);
+            this->head = new N(value, this->head);
 
             if (isEmpty()) {
                 this->endNode = this->head;
@@ -103,7 +142,7 @@ class LinkedList {
             if (isEmpty()) {
               pushFront(value);
             } else {
-                this->endNode = (this->endNode->next = new Node<T>(value));
+                this->endNode = (this->endNode->next = new N(value));
             }
             return true;
         }
@@ -112,7 +151,7 @@ class LinkedList {
             if (isEmpty()) {
               return Optional<T>();
             } 
-            Node<T>* temp = this->head;
+            N* temp = this->head;
             this->head = temp->next;
             T value = temp->value;
             delete temp;
