@@ -10,6 +10,14 @@ public:
     LinkedQueue() = default;
     ~LinkedQueue() = default;
 
+    bool isQueueEmpty() {
+        return this->front().check();
+    }
+
+    bool operator==(LinkedQueue& qu){
+        return LinkedList<T>::operator==(qu);
+    }
+
     Optional<T> peek(){
         return this->front();
     }
@@ -22,7 +30,7 @@ public:
         this->pushBack(value);
     }
 
-    Optional<T> pop(){
+    Optional<T> dequeue(){
         return this->popFront();
     }
 };

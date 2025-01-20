@@ -10,6 +10,10 @@ public:
     LinkedStack() = default;
     ~LinkedStack() = default;
 
+    bool isStackEmpty() {
+        return this->isEmpty();
+    }
+
     Optional<T> peek(){
         return this->front();
     }

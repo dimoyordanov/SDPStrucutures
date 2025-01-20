@@ -53,6 +53,20 @@ class LinkedList {
             return I();
         }
 
+        bool operator==(LinkedList<T>& list){
+            for (I a = list.begin(), b = this->begin();
+                 a!=list.end() || b != this->end();
+                 (a++,b++))
+            {
+                if(((b.elem == nullptr && a.elem!=b.elem) ||
+                    (a.elem == nullptr && a.elem!=b.elem)) || 
+                    (*a!=*b)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         Optional<T> removeAfter(I position) {
             if(!position.valid()) {
                 return Optional<T>();
