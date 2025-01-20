@@ -3,13 +3,39 @@
 #include "../../structures/Optional/Optional.hpp"
 
 template <typename T>
+class DynamicArray;
+
+template <typename B> 
+class DynamicArrayIterator{
+        DynamicArray<B>* arr;
+        int index;
+    public:
+        DynamicArrayIterator(int index, DynamicArray<B>* arr): index(index), arr(arr) {}
+        DynamicArrayIterator<B>& operator++() { return *this = DynamicArrayIterator(index+1, arr);}
+        DynamicArrayIterator<B> operator++(int a) {DynamicArrayIterator<B> aa = *this ;*this = DynamicArrayIterator(index+1, arr);return aa;}
+        DynamicArrayIterator<B>& operator=(DynamicArrayIterator<B> v) {this->arr = v.arr; this->index = v.index;return *this;}
+        bool operator==(DynamicArrayIterator<B>& val) {return this->index == val.index;}
+        bool operator!=(DynamicArrayIterator<B>& val2) {return !(*this==val2);};
+        B operator*() {return arr->getAt(this->index).get();}
+};
+
+template <typename T>
 class DynamicArray
 {
 private:
+    friend DynamicArrayIterator<T>;
     T* array;
     size_t arraySize;
     size_t capacity;
 public:
+
+    DynamicArrayIterator<T> begin() {
+        return DynamicArrayIterator<T>(0, this);
+    }
+    DynamicArrayIterator<T> end() {
+        return DynamicArrayIterator<T>(arraySize, this);
+    }
+
     void resize() {
         T* temp = new T[capacity*2];
         for (size_t i = 0; i < arraySize; i++)
