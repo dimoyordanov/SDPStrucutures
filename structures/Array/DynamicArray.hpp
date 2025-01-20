@@ -53,7 +53,7 @@ public:
         if(index > arraySize){
             return Optional<T>();
         }
-        return Optional<T>(this->array[arraySize]);
+        return Optional<T>(this->array[index]);
     }
 
     void pushBack(T data){
