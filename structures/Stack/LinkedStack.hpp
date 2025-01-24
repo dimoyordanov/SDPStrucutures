@@ -14,7 +14,7 @@ public:
         return this->isEmpty();
     }
 
-    Optional<T> peek(){
+    T peek(){
         return this->front();
     }
 
@@ -26,7 +26,7 @@ public:
         this->pushFront(value);
     }
 
-    Optional<T> pop(){
+    T pop(){
         return this->popFront();
     }
 };

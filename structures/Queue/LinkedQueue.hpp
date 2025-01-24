@@ -18,7 +18,7 @@ public:
         return LinkedList<T>::operator==(qu);
     }
 
-    Optional<T> peek(){
+    T peek(){
         return this->front();
     }
 
@@ -30,7 +30,7 @@ public:
         this->pushBack(value);
     }
 
-    Optional<T> dequeue(){
+    T dequeue(){
         return this->popFront();
     }
 };

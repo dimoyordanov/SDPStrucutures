@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../../structures/Optional/Optional.hpp"
-
 template <typename T>
 class DoublyLinkedList {
     private:
@@ -36,7 +34,13 @@ class DoublyLinkedList {
                 IteratorLinkedList(Node<B>* node): elem(node){}
                 IteratorLinkedList<B>& operator==(IteratorLinkedList<B>& a) {this->elem = a.elem; return *this;}
                 bool valid() {return elem != nullptr;}
-                Optional<B> get() {return (!valid())?Optional<B>():Optional<B>(elem->value);}
+                B get() {
+                    if (!valid()){
+                        throw std::runtime_error("Double linked list element is null");
+                    } else {
+                        return elem->value;
+                    }
+                }
                 IteratorLinkedList<B> next() {return (!valid())?IteratorLinkedList():IteratorLinkedList(this->elem->next);}
                 IteratorLinkedList<B> prev() {return (!valid())?IteratorLinkedList():IteratorLinkedList(this->elem->prev);}
                 bool equal(IteratorLinkedList<B>& val) {return this->elem == val.elem;}
@@ -121,13 +125,13 @@ class DoublyLinkedList {
             return *this;
         }
 
-        Optional<T> removeAfter(I position) {
+        T removeAfter(I position) {
             if(!position.valid()) {
-                return Optional<T>();
+                throw std::runtime_error("Iterator position is at null");
             }
             Node<T>* value = position.elem->next;
             if(value == nullptr) {
-                return Optional<T>();
+                throw std::runtime_error("The next element of the iterator is null");
             }
             position.elem->next = nullptr;
             T retValue = value->value;
@@ -135,9 +139,9 @@ class DoublyLinkedList {
             return retValue;
         }
 
-        Optional<T> removeAt(I position) {
+        T removeAt(I position) {
             if(!position.valid()) {
-                return Optional<T>();
+                throw std::runtime_error("Iterator is pointing at null");
             }
             Node<T>* value = position.elem;
 
@@ -180,25 +184,25 @@ class DoublyLinkedList {
             return true;
         }
 
-        Optional<T> popFront() {
+        T popFront() {
             return this->removeAt(begin());
         }
-        Optional<T> popBack() {
+        T popBack() {
             return this->removeAt(last());
         }
 
-        Optional<T> front() {
+        T front() {
             if (isEmpty()) {
-              return Optional<T>();
+              throw std::runtime_error("Double linked list is empty");
             }
-            return Optional<T>(this->head->value);
+            return this->head->value;
         }
 
-        Optional<T> back() {
+        T back() {
             if (isEmpty()) {
-              return Optional<T>();
+              throw std::runtime_error("Double linked list is null");
             } 
-            return Optional<T>(this->endNode->value);
+            return this->endNode->value;
         }
 
         void erase() {
