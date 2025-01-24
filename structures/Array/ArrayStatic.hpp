@@ -1,118 +1,88 @@
 #ifndef ARRAYSTATIC
 #define ARRAYSTATIC
 
-template <typename T>
+#include <exception>
+
+template <typename T, size_t capacity>
 class ArrayStatic {
     private:
-        Optional<T>* value;
-        size_t capacity;
+        T value[capacity];
     public:
 
-        template <typename L>
+        template <typename L, size_t capacity2>
         class IteratorArrayStatic{
-            size_t capacity;
-            Optional<L>* list;
+            L* list;
             size_t location;
-            Optional<L> empty;
             public:
-            IteratorArrayStatic(Optional<L>* list, size_t capacity, size_t location){
-                this->capacity = capacity;
+            IteratorArrayStatic(L* list, size_t location){
                 this->list = list;
                 this->location = location;
             }
             IteratorArrayStatic(const IteratorArrayStatic& iterator){
-                this->capacity = iterator.capacity;
                 this->list = iterator.list;
                 this->location = iterator.location;
             }
 
-            bool valid() const { return this->capacity > this->location; }
+            bool valid() const { return capacity2 > this->location; }
             operator bool() const { return valid(); }
-            Optional<L>& get () {if (!valid()) {return empty;} else {return this->list[location];}}
-            Optional<L>& operator*() {return get();}
-            IteratorArrayStatic<L>& next(){this->location++; return *this;}
-            IteratorArrayStatic<L>& prev(){this->location--; return *this;}
-            IteratorArrayStatic<L>& operator++() { return next();}
-            IteratorArrayStatic<L> operator++(int a) {IteratorArrayStatic<L> iterator2(*this);next();return iterator2;}
+            L& get () {
+                if (!valid()) {
+                    throw std::runtime_error("Trying to access ellement that is out of bounrs");
+                } else {
+                    return this->list[location];
+                }
+            }
+            L& operator*() {return get();}
+            IteratorArrayStatic<L, capacity2>& next(){this->location++; return *this;}
+            IteratorArrayStatic<L, capacity2>& prev(){this->location--; return *this;}
+            IteratorArrayStatic<L, capacity2>& operator++() { return next();}
+            IteratorArrayStatic<L, capacity2> operator++(int a) {IteratorArrayStatic<L, capacity2> iterator2(*this);next();return iterator2;}
             bool operator==(const IteratorArrayStatic& iterator) {return this->location == iterator.location;}
         };
 
-        using I = IteratorArrayStatic<T>;
+        using I = IteratorArrayStatic<T, capacity>;
 
         I begin(){
-            return I(this->value, this->capacity, 0);
+            return I(this->value, 0);
         }
 
         I end(){
-            return I(this->value, this->capacity, this->capacity);
+            return I(this->value, this->capacity);
         }
 
-        ArrayStatic(size_t s = 20){
-            value = new Optional<T>[s];
-            capacity = s;
+        ArrayStatic(){
         }
 
-
-
-        ArrayStatic(ArrayStatic&& array){
-            this->value = array.value;
-            this->capacity = array.capacity;
-
-            array.value = nullptr;
-            array.capacity = 0;
-        }
-
-        ArrayStatic(const ArrayStatic& array){
-            value = new Optional<T>[array.capacity];
-            capacity = array.capacity;
+        ArrayStatic(const ArrayStatic<T, capacity>& array) {
             for(int i = 0; i < capacity; i++){
-                if(array.value[i].check()){
-                    this->value[i] = array.value[i];
-                }
+                this->value[i] = array.value[i];
             }
         }
 
-        Optional<T> get(size_t index) const{
+        T get(size_t index) const{
             if (index < 0 || index >= capacity) {
-                return Optional<T>();
+                throw std::runtime_error("Unable to access element since it is out of bounds");
             }
             return this->value[index];
         }
         bool set(size_t index, const T& value) {
             if (index < 0 || index >= capacity) {
-                return false;
+                throw std::runtime_error("Unable to access element since it is out of bounds");
             }
-            if (this->value[index].check()) {
-                return false;
-            }
-            this->value[index].set(value);
+            this->value[index] = value;
             return true;
         }
         bool set(size_t index, T&& value) {
             if (index < 0 || index >= capacity) {
-                return false;
+                throw std::runtime_error("Unable to access element since it is out of bounds");
             }
-            if (this->value[index].check()) {
-                return false;
-            }
-            this->value[index].set(value);
-            return true;
-        }
-        bool remove(size_t index) {
-            if (index < 0 || index >= capacity) {
-                return false;
-            }
-            if (!this->value[index].check()) {
-                return false;
-            }
-            this->value[index].unset();
+            this->value[index] = value;
             return true;
         }
         size_t size() const{
-            return this->capacity;
+            return capacity;
         }
         ~ArrayStatic(){
-            delete[] value;
         }
 };
 

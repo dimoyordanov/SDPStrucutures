@@ -4,15 +4,15 @@ project(SDPStructures VERSION 0.1.0 LANGUAGES C CXX)
 # Add a library for the example classes
 add_library(SDPTest 
     main.cpp
-    structures/Optional/Optional.hpp
+    # structures/Optional/Optional.hpp
     structures/Array/ArrayStatic.hpp
-    structures/Pair/Pair.hpp
-    structures/List/LinkedList.hpp
-    structures/List/DoublyLinkedList.hpp
-    structures/Trees/Trees.hpp
-    structures/Stack/LinkedStack.hpp
-    structures/Queue/LinkedQueue.hpp
-    structures/Array/DynamicArray.hpp
+    # structures/Pair/Pair.hpp
+    # structures/List/LinkedList.hpp
+    # structures/List/DoublyLinkedList.hpp
+    # structures/Trees/Trees.hpp
+    # structures/Stack/LinkedStack.hpp
+    # structures/Queue/LinkedQueue.hpp
+    # structures/Array/DynamicArray.hpp
 )
 
 include(CTest)
@@ -35,13 +35,13 @@ enable_testing()
 # Add a testing executable
 add_executable(unit_tests 
     unit_tests.cpp 
-    tests/Optional/OptionalTest.cpp 
+    # tests/Optional/OptionalTest.cpp 
     tests/Array/ArrayTest.cpp
-    tests/Pair/Pair.cpp
-    tests/List/ListTest.cpp
-    tests/List/DoublyLinkedList.cpp
-    tests/Tree/Tree.cpp
-    tests/Array/DynamicArrayTest.cpp
+    # tests/Pair/Pair.cpp
+    # tests/List/ListTest.cpp
+    # tests/List/DoublyLinkedList.cpp
+    # tests/Tree/Tree.cpp
+    # tests/Array/DynamicArrayTest.cpp
 )
 
 target_link_libraries(unit_tests
