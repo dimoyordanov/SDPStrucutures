@@ -23,10 +23,14 @@ private:
 
 protected:
     Node<T>*& gotoElement(T value) {
-        No** elem;
-        for(elem = &(this->root);
-            (*elem) != nullptr && (*elem)->data != value;
-            elem = ((*elem)->data < value)?&((*elem)->right):&((*elem)->left)){}
+        No** elem = &(this->root);
+        while((*elem) != nullptr && (*elem)->data != value){
+            if ((*elem)->data < value){
+                elem = &((*elem)->right);
+            } else {
+                elem = &((*elem)->left);
+            }
+        }
         
         return *elem;
     }
