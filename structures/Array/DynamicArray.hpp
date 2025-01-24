@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../../structures/Optional/Optional.hpp"
-
 template <typename T>
 class DynamicArray;
 
@@ -13,10 +11,12 @@ class DynamicArrayIterator{
         DynamicArrayIterator(int index, DynamicArray<B>* arr): index(index), arr(arr) {}
         DynamicArrayIterator<B>& operator++() { return *this = DynamicArrayIterator(index+1, arr);}
         DynamicArrayIterator<B> operator++(int a) {DynamicArrayIterator<B> aa = *this ;*this = DynamicArrayIterator(index+1, arr);return aa;}
+        DynamicArrayIterator<B>& operator--() { return *this = DynamicArrayIterator(index-1, arr);}
+        DynamicArrayIterator<B> operator--(int a) {DynamicArrayIterator<B> aa = *this ;*this = DynamicArrayIterator(index-1, arr);return aa;}
         DynamicArrayIterator<B>& operator=(DynamicArrayIterator<B> v) {this->arr = v.arr; this->index = v.index;return *this;}
         bool operator==(DynamicArrayIterator<B>& val) {return this->index == val.index;}
         bool operator!=(DynamicArrayIterator<B>& val2) {return !(*this==val2);};
-        B operator*() {return arr->getAt(this->index).get();}
+        B operator*() {return arr->getAt(this->index);}
 };
 
 template <typename T>
@@ -43,9 +43,10 @@ public:
             temp[i] = this->array[i];
         }
         delete this->array;
+        this->capacity *= 2;
         this->array = temp;
     }
-    DynamicArray(): array(new T[1]), arraySize(0), capacity(1) {}
+    DynamicArray(): array(new T[1]), arraySize(0), capacity(4) {}
     DynamicArray(size_t capacity): array(new T[capacity]), arraySize(0), capacity(capacity) {}
     
     bool insertAt(T data, size_t index) {
@@ -63,29 +64,34 @@ public:
         return true;
     }
 
-    Optional<T> removeAt(size_t index) {
+    T removeAt(size_t index) {
         if(index > arraySize){
-            return Optional<T>();
+            throw std::runtime_error("Trying to access element that is out of bounds");
         }
         T data = this->array[index];
         for(size_t ind = index; ind < this->arraySize-1; ind++){
             this->array[ind] = this->array[ind+1]; 
         }
         this->arraySize--;
-        return Optional<T>(data);
+        return data;
     }
 
-    Optional<T> getAt(size_t index) {
+    T getAt(size_t index) {
         if(index > arraySize){
-            return Optional<T>();
+            throw std::runtime_error("Trying to access element that is out of bounds");
         }
-        return Optional<T>(this->array[index]);
+        return this->array[index];
     }
 
     void pushBack(T data){
         insertAt(data, this->arraySize);
     }
-    Optional<T> popBack(T data){
+
+    void pushFront(T data){
+        insertAt(data, 0);
+    }
+
+    T popBack(T data){
         return removeAt(this->arraySize);
     }
     ~DynamicArray(){

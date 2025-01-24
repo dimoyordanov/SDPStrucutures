@@ -11,7 +11,7 @@ add_library(SDPTest
     structures/Trees/Trees.hpp
     structures/Stack/LinkedStack.hpp
     structures/Queue/LinkedQueue.hpp
-    # structures/Array/DynamicArray.hpp
+    structures/Array/DynamicArray.hpp
 )
 
 include(CTest)
@@ -39,7 +39,7 @@ add_executable(unit_tests
     tests/List/ListTest.cpp
     tests/List/DoublyLinkedList.cpp
     tests/Tree/Tree.cpp
-    # tests/Array/DynamicArrayTest.cpp
+    tests/Array/DynamicArrayTest.cpp
 )
 
 target_link_libraries(unit_tests
