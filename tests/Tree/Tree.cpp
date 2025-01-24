@@ -5,18 +5,15 @@
 #include "../../structures/Trees/Trees.hpp"
 
 
-TEST(BinarySearchTree, BinarySerchTreeCreate) {
+TEST(BinarySearchTree, BinarySearchTreeAddElement) {
     BinarySearchTree<int> p;
     p.add(1);
 
-    for (size_t i = 0; i <= 1; i++)
-    {
-        EXPECT_TRUE(p.contains(i));
-    }
+    EXPECT_TRUE(p.contains(1));
 }
 
 
-TEST(BinarySearchTree, BinarySerchTreeCreate) {
+TEST(BinarySearchTree, BinarySearchTreeEmpty) {
     BinarySearchTree<int> p;
 
     EXPECT_FALSE(p.contains(6));
