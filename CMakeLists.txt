@@ -7,7 +7,7 @@ add_library(SDPTest
     # structures/Optional/Optional.hpp
     structures/Array/ArrayStatic.hpp
     structures/Pair/Pair.hpp
-    # structures/List/LinkedList.hpp
+    structures/List/LinkedList.hpp
     # structures/List/DoublyLinkedList.hpp
     # structures/Trees/Trees.hpp
     # structures/Stack/LinkedStack.hpp
@@ -38,7 +38,7 @@ add_executable(unit_tests
     # tests/Optional/OptionalTest.cpp 
     tests/Array/ArrayTest.cpp
     tests/Pair/Pair.cpp
-    # tests/List/ListTest.cpp
+    tests/List/ListTest.cpp
     # tests/List/DoublyLinkedList.cpp
     # tests/Tree/Tree.cpp
     # tests/Array/DynamicArrayTest.cpp

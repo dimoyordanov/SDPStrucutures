@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../../structures/Optional/Optional.hpp"
-
 template <typename T>
 class LinkedList {
     private:
@@ -28,7 +26,13 @@ class LinkedList {
                 IteratorLinkedList(Node<B>* node): elem(node){}
                 IteratorLinkedList<B>& operator==(IteratorLinkedList<B>& a) {this->elem = a.elem; return *this;}
                 bool valid() {return elem != nullptr;}
-                Optional<B> get() {return (!valid())?Optional<B>():Optional<B>(elem->value);}
+                B get() {
+                    if (!valid()) {
+                        throw std::runtime_error("Unable to access null pointer");
+                    } else {
+                        return elem->value;
+                    }
+                }
                 IteratorLinkedList<B> next() {return (!valid())?IteratorLinkedList():IteratorLinkedList(this->elem->next);}
                 bool equal(IteratorLinkedList<B>& val) {return this->elem == val.elem;}
                 IteratorLinkedList<B>& operator++() {return *this = this->next();}
@@ -67,13 +71,13 @@ class LinkedList {
             return true;
         }
 
-        Optional<T> removeAfter(I position) {
+        T removeAfter(I position) {
             if(!position.valid()) {
-                return Optional<T>();
+                throw std::runtime_error("Can not remove after null");
             }
             Node<T>* value = position.elem->next;
             if(value == nullptr) {
-                return Optional<T>();
+                throw std::runtime_error("Can not remove null element");
             }
             position.elem->next = value->next;
             if (value->next == nullptr) {
@@ -84,9 +88,9 @@ class LinkedList {
             return retValue;
         }
 
-        Optional<T> removeAt(I position) {
+        T removeAt(I position) {
             if(!position.valid()) {
-                return Optional<T>();
+                throw std::runtime_error("Can not remove at null");
             }
             Node<T>* value = position.elem;
             T retValue = value->value;
@@ -107,7 +111,7 @@ class LinkedList {
                 if (found == true) {
                     return removeAfter(iterator);
                 } else {
-                    return Optional<T>();
+                    throw std::runtime_error("Unable to find the element in the linked list");
                 }
             }
         }
@@ -199,26 +203,26 @@ class LinkedList {
             return true;
         }
 
-        Optional<T> popFront() {
+        T popFront() {
             return removeAt(this->begin());
         }
 
-        Optional<T> popBack() {
+        T popBack() {
             return removeAt(this->last());
         }
 
-        Optional<T> front() {
+        T front() {
             if (isEmpty()) {
-              return Optional<T>();
+                throw std::runtime_error("Linked list is null");
             }
-            return Optional<T>(this->head->value);
+            return this->head->value;
         }
 
-        Optional<T> back() {
+        T back() {
             if (isEmpty()) {
-              return Optional<T>();
+                throw std::runtime_error("Linked list is null");
             } 
-            return Optional<T>(this->endNode->value);
+            return this->endNode->value;
         }
 
         void erase() {

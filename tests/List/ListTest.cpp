@@ -13,8 +13,8 @@ TEST(LinkedListTests, LinkListedCreate) {
     LinkedList<int> list;
     list.pushBack(1);
     EXPECT_FALSE(list.isEmpty());
-    EXPECT_EQ(*(list.front()), 1);
-    EXPECT_EQ(*(list.popFront()), 1);
+    EXPECT_EQ(list.front(), 1);
+    EXPECT_EQ(list.popFront(), 1);
     EXPECT_TRUE(list.isEmpty());
 }
 
@@ -22,16 +22,16 @@ TEST(LinkedListTests, LinkListedAddRandom) {
     LinkedList<int> list;
     list.pushBack(1);
     EXPECT_FALSE(list.isEmpty());
-    EXPECT_EQ(*(list.front()), 1);
+    EXPECT_EQ(list.front(), 1);
     list.insertAfter(list.begin(), 2);
     list.insertAfter(list.begin(), 5);
     list.insertAfter(++list.begin(), 3);
     list.insertAfter(list.begin(), 10);
-    EXPECT_EQ(*(list.popFront()), 1);
-    EXPECT_EQ(*(list.popFront()), 10);
-    EXPECT_EQ(*(list.popFront()), 5);
-    EXPECT_EQ(*(list.popFront()), 3);
-    EXPECT_EQ(*(list.popFront()), 2);
+    EXPECT_EQ(list.popFront(), 1);
+    EXPECT_EQ(list.popFront(), 10);
+    EXPECT_EQ(list.popFront(), 5);
+    EXPECT_EQ(list.popFront(), 3);
+    EXPECT_EQ(list.popFront(), 2);
     EXPECT_TRUE(list.isEmpty());
 }
 
@@ -39,13 +39,13 @@ TEST(LinkedListTests, TestRemovePopBack) {
     LinkedList<int> list;
     list.pushBack(1);
     EXPECT_FALSE(list.isEmpty());
-    EXPECT_EQ(*(list.front()), 1);
+    EXPECT_EQ(list.front(), 1);
     list.insertAfter(list.begin(), 2);
     list.insertAfter(list.begin(), 5);
     list.insertAfter(list.begin(), 3);
     list.insertAfter(list.begin(), 10);
-    EXPECT_EQ(*(list.popBack()), 2);
-    EXPECT_EQ(*(list.popBack()), 5);
+    EXPECT_EQ(list.popBack(), 2);
+    EXPECT_EQ(list.popBack(), 5);
     EXPECT_FALSE(list.isEmpty());
 }
 
@@ -56,8 +56,8 @@ TEST(LinkedListTests, LinkListedPushBack) {
         list.pushBack(i);
     }
     for(int i = 0; i < 20; i++){
-        EXPECT_EQ(*(list.front()), i);
-        EXPECT_EQ(*(list.popFront()), i);
+        EXPECT_EQ(list.front(), i);
+        EXPECT_EQ(list.popFront(), i);
     }
     
 }
@@ -68,8 +68,8 @@ TEST(LinkedListTests, LinkListedPushFront) {
         list.pushFront(i);
     }
     for(int i = 0; i < 20; i++){
-        EXPECT_EQ(*(list.front()), i);
-        EXPECT_EQ(*(list.popFront()), i);
+        EXPECT_EQ(list.front(), i);
+        EXPECT_EQ(list.popFront(), i);
     }
 }
 
