@@ -4,7 +4,6 @@ project(SDPStructures VERSION 0.1.0 LANGUAGES C CXX)
 # Add a library for the example classes
 add_library(SDPTest 
     main.cpp
-    # structures/Optional/Optional.hpp
     structures/Array/ArrayStatic.hpp
     structures/Pair/Pair.hpp
     structures/List/LinkedList.hpp
@@ -35,7 +34,6 @@ enable_testing()
 # Add a testing executable
 add_executable(unit_tests 
     unit_tests.cpp 
-    # tests/Optional/OptionalTest.cpp 
     tests/Array/ArrayTest.cpp
     tests/Pair/Pair.cpp
     tests/List/ListTest.cpp

@@ -2,7 +2,6 @@
 
 #include <gtest/gtest.h>
 
-#include "../../structures/Optional/Optional.hpp"
 #include "../../structures/Array/ArrayStatic.hpp"
 
 TEST(ArrayTest, TestCreateSizeIsOk) {
