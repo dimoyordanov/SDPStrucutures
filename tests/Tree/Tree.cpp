@@ -12,6 +12,14 @@ TEST(BinarySearchTree, BinarySearchTreeAddElement) {
     EXPECT_TRUE(p.contains(1));
 }
 
+TEST(BinarySearchTree, BinarySearchTreeAdd2Element) {
+    BinarySearchTree<int> p;
+    p.add(1);
+    p.add(2);
+
+    EXPECT_TRUE(p.contains(1));
+    EXPECT_TRUE(p.contains(2));
+}
 
 TEST(BinarySearchTree, BinarySearchTreeEmpty) {
     BinarySearchTree<int> p;
