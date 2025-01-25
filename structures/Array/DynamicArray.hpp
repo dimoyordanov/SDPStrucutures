@@ -5,10 +5,10 @@ class DynamicArray;
 
 template <typename B> 
 class DynamicArrayIterator{
-        DynamicArray<B>* arr;
+        const DynamicArray<B>* arr;
         int index;
     public:
-        DynamicArrayIterator(int index, DynamicArray<B>* arr): index(index), arr(arr) {}
+        DynamicArrayIterator(int index, const DynamicArray<B>* arr): index(index), arr(arr) {}
         DynamicArrayIterator<B>& operator++() { return *this = DynamicArrayIterator(index+1, arr);}
         DynamicArrayIterator<B> operator++(int a) {DynamicArrayIterator<B> aa = *this ;*this = DynamicArrayIterator(index+1, arr);return aa;}
         DynamicArrayIterator<B>& operator--() { return *this = DynamicArrayIterator(index-1, arr);}
@@ -27,34 +27,46 @@ private:
     T* array;
     size_t arraySize;
     size_t capacity;
+
 public:
 
-    DynamicArrayIterator<T> begin() {
+    void resize(DynamicArray<T>* source, size_t newCapacity) {
+        T* temp = new T[newCapacity];
+        for (size_t i = 0; i < source->arraySize && i < newCapacity; i++)
+        {
+            temp[i] = source->array[i];
+        }
+        delete this->array;
+        this->capacity = newCapacity;
+        this->array = temp;
+    }
+
+    DynamicArrayIterator<T> begin() const{
         return DynamicArrayIterator<T>(0, this);
     }
-    DynamicArrayIterator<T> end() {
+    DynamicArrayIterator<T> end() const{
         return DynamicArrayIterator<T>(arraySize, this);
     }
 
-    void resize() {
-        T* temp = new T[capacity*2];
-        for (size_t i = 0; i < arraySize; i++)
-        {
-            temp[i] = this->array[i];
-        }
-        delete this->array;
-        this->capacity *= 2;
-        this->array = temp;
+    DynamicArray(): array(nullptr), arraySize(0), capacity(1) {
+        this->array = new T[1];
     }
-    DynamicArray(): array(new T[1]), arraySize(0), capacity(4) {}
-    DynamicArray(size_t capacity): array(new T[capacity]), arraySize(0), capacity(capacity) {}
-    
+    DynamicArray(size_t capacity): array(nullptr), arraySize(0), capacity(capacity) {
+        this->array = new T[capacity];
+    }
+    DynamicArray(const DynamicArray<T>& arr): array(nullptr), arraySize(0), capacity(1) {
+        this->array = new T[1];
+        for(T i: arr) {
+            this->pushBack(i);
+        }
+    }
+
     bool insertAt(T data, size_t index) {
         if(index > arraySize){
             return false;
         }
-        if(capacity-2 <= arraySize){
-            resize();
+        if(capacity < arraySize){
+            resize(this, capacity*2);
         }
         for(size_t ind = arraySize; ind > index; ind--){
             this->array[ind] = this->array[ind-1]; 
@@ -76,7 +88,7 @@ public:
         return data;
     }
 
-    T getAt(size_t index) {
+    T getAt(size_t index) const{
         if(index > arraySize){
             throw std::runtime_error("Trying to access element that is out of bounds");
         }
@@ -91,7 +103,7 @@ public:
         insertAt(data, 0);
     }
 
-    T popBack(T data){
+    T popBack(){
         return removeAt(this->arraySize);
     }
     ~DynamicArray(){
