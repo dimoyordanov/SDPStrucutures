@@ -58,6 +58,10 @@ public:
     }
 
     ~HashMap() {
+        for (auto I : *array)
+        {
+            delete I;
+        }
         delete array;
     }
 
