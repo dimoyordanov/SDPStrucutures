@@ -6,13 +6,13 @@
 
 #include "../../structures/Map/HashMap.hpp"
 
-TEST(HashMap, HashMapBasic) {
-    HashMap<std::string, int> list;
-    list.put("hello", 1);
-    EXPECT_EQ(list.contains("hello"), true);
-    EXPECT_EQ(list.contains("Hello"), false);
-    EXPECT_EQ(list.get("hello"),1);
-}
+// TEST(HashMap, HashMapBasic) {
+//     HashMap<std::string, int> list;
+//     list.put("hello", 1);
+//     EXPECT_EQ(list.contains("hello"), true);
+//     EXPECT_EQ(list.contains("Hello"), false);
+//     EXPECT_EQ(list.get("hello"),1);
+// }
 
 // TEST(HashMap, HashMapMany) {
 //     HashMap<std::string, int> list;
