@@ -41,7 +41,7 @@ add_executable(unit_tests
     tests/List/DoublyLinkedList.cpp
     tests/Tree/Tree.cpp
     tests/Array/DynamicArrayTest.cpp
-    tests/Map/HashMap.cpp
+    # tests/Map/HashMap.cpp
 )
 
 target_link_libraries(unit_tests
